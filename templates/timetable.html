@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="static/style.css">
+    <meta charset="UTF-8">
+    <title>Расписание</title>
+    {% macro render_menu() %}
+    <div class="menu">
+        <ul>
+            <li ><a href="{{url_for('index')}}">Брони</a></li>
+            <li><a href="{{url_for('guest')}}">Гости</a></li>
+            <li class="active"><a href="{{url_for('timetable')}}">Расписание</a></li>
+        </ul>
+    </div>
+    {% endmacro %}
+
+    {% macro render_info() %}
+        {% for i in range(len(df_timetable)) %}
+            <p>
+            {% if(df_timetable.loc[i]['is_done']) == False %}
+                <button type="submit" name="done" value="{{df_timetable.loc[i]['apartment_day_work_id']}}">Сделано</button>
+            {% endif %}
+            {{df_timetable.loc[i]["name"]}}  {{df_timetable.loc[i]["address"]}}
+            <p>
+        {% endfor %}
+    {% endmacro %}
+</head>
+<body>
+    {{render_menu()}}
+    <form action="{{url_for('timetable')}}" method="get">
+        <label>Введите дату:</label>
+        <input type="text" name="searched_date" value="{{date}}">
+        <input type="submit" name="search" value="Показать">
+    {{render_info()}}
+    </form>
+</body>
+</html>

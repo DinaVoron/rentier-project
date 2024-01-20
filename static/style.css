@@ -1,0 +1,86 @@
+.menu {
+    background-color: #f1f1f1;
+    box-shadow: 4px 5px 10px rgba(0, 0, 0, 0.4);
+    width: 100%;
+}
+
+.menu li {
+    display: inline-block;
+    padding: 10px;
+    color: #6f6d6d;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #6f6d6d;
+}
+
+.menu li:hover {
+    background-color: #f87777;
+    cursor: pointer;
+    color: #f8f8f8;
+}
+
+.menu ul {
+    padding: 0px;
+}
+
+.active {
+    background-color: #f87777;
+    color: #f8f8f8;
+}
+
+.active a:visited {
+color: #f8f8f8;
+}
+
+.menu a:hover {
+    color: #f8f8f8;
+}
+
+table {
+    align: center;
+}
+
+table td {
+    border: 1px solid black;
+}
+
+.day {
+    width: 30px;
+    height: 30px;
+}
+
+.busy {
+    background: #ff0000;
+}
+
+.booked {
+    background: #ffff00;
+}
+
+.calendar {
+    margin: 0px auto;
+    align: center;
+}
+
+td button {
+    width: 30px;
+    height: 30px;
+    background: rgba(0,0,0,0);
+    border: none;
+}
+
+.guest {
+    width: 300px;
+}
+
+.apart_info {
+    border-spacing: 0px;
+    padding-top: 50px;
+}
+
+.apart_info td {
+    border: 1px solid black;
+    padding: 5px;
+}

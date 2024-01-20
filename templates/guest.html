@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Гости</title>
+    <link rel="stylesheet" href="static/style.css">
+
+    {% macro render_menu() %}
+    <div class="menu">
+        <ul>
+            <li><a href="{{url_for('index')}}">Брони</a></li>
+            <li class="active"><a href="{{url_for('guest')}}">Гости</a></li>
+            <li><a href="{{url_for('timetable')}}">Расписание</a></li>
+        </ul>
+    </div>
+    {% endmacro %}
+
+    {% macro render_apartment_info() %}
+    <label>Выберите квартиру:</label>
+    <select name="apartment_info">
+        {% if apartment == 0 %}
+        <option selected></option>
+        {% for i in range(len(df_apartments)) %}
+        <option value="{{df_apartments.loc[i]['apartment_id']}}">{{df_apartments.loc[i]['address']}}</option>
+        {% endfor %}
+        {% else %}
+        <option></option>
+        {% for i in range(len(df_apartments)) %}
+        {% if df_apartments.loc[i]['apartment_id'] == apartment %}
+        <option selected value="{{df_apartments.loc[i]['apartment_id']}}">{{df_apartments.loc[i]['address']}}</option>
+        {% else %}
+        <option value="{{df_apartments.loc[i]['apartment_id']}}">{{df_apartments.loc[i]['address']}}</option>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+    </select>
+    {% endmacro %}
+
+    {% macro render_date() %}
+    <input type="text" placeholder="2023-01-08" name="date_info" value="{{day}}">
+    {% endmacro %}
+
+    {% macro render_info() %}
+    <div>
+        {% if len(df_guests) != 0 %}
+        <table class="apart_info">
+            <tr>
+                <th>Имя</th>
+                <th>Номер телефона</th>
+                <th>Адрес</th>
+                <th>Дата</th>
+                <th>Тип</th>
+            </tr>
+        {% endif %}
+        {% for i in range(len(df_guests)) %}
+            <tr>
+                <td>{{df_guests.loc[i]['guest_name']}}</td>
+                <td>{{df_guests.loc[i]['phone']}}</td>
+                <td>{{df_guests.loc[i]['address']}}</td>
+                <td>{{df_guests.loc[i]['date']}}</td>
+                <td>{{df_guests.loc[i]['state_name']}}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    </div>
+    {% endmacro %}
+
+</head>
+<body>
+    {{render_menu()}}
+    <form action="{{url_for('guest')}}">
+        {{render_apartment_info()}}
+        {{render_date()}}
+        <input type="submit" name="search_guest" value="Найти гостя">
+        {% if(search) %}
+        {{render_info()}}
+        {% endif %}
+    </form>
+</body>
+</html>

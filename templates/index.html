@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="static/style.css">
+    <meta charset="UTF-8">
+    <title>Брони</title>
+
+    {% macro render_menu() %}
+    <div class="menu">
+        <ul>
+            <li class="active"><a href="{{url_for('index')}}">Брони</a></li>
+            <li><a href="{{url_for('guest')}}">Гости</a></li>
+            <li><a href="{{url_for('timetable')}}">Расписание</a></li>
+        </ul>
+    </div>
+    {% endmacro %}
+
+    {% macro render_calendar() %}
+    <table>
+            <tr>
+                <th></th>
+                {% for j in range (1, size) %}
+                <th>{{j}}</th>
+                {% endfor %}
+            </tr>
+        {% for i in range (0,len(df_apartments)) %}
+            <tr>
+                <td>{{df_apartments.loc[i]['address']}}</td>
+                {% for j in range (1, size) %}
+                {% if df_calendar.loc[i*(size-1) + j - 1]['state_id'] == 3 %}
+                <td class="day booked">
+                    <button type="submit" name="add_booking" value="{{df_apartments['apartment_id'][i]}} {{j}}"></button>
+                </td>
+                {% else %}
+                {% if df_calendar.loc[i*(size-1) + j - 1]['state_id'] == 2 %}
+                <td class="day busy">
+                    <button type="submit" name="add_booking" value="{{df_apartments['apartment_id'][i]}} {{j}}"></button>
+                </td>
+                {% else %}
+                <td class="day">
+                    <button type="submit" name="add_booking" value="{{df_apartments['apartment_id'][i]}} {{j}}"></button>
+                </td>
+                {% endif %}
+                {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
+    {% endmacro %}
+
+    {% macro render_month() %}
+    {% endmacro %}
+
+    {% macro render_year() %}
+    <select name="year">
+    {% for i in range (2023, 2026) %}
+        {% if i == year_selected %}
+        <option selected>{{i}}</option>
+        {% else %}
+        <option>{{i}}</option>
+        {% endif %}
+    {% endfor %}
+    </select>
+    {% endmacro %}
+
+    {% macro render_month() %}
+    <select name="month">
+        {% for i in range (len(df_months)) %}
+        {% if df_months.loc[i]["value"] == month_selected %}
+        <option value="{{df_months.loc[i]['value']}}" selected>{{df_months.loc[i]["month"]}}</option>
+        {% else %}
+        <option value="{{df_months.loc[i]['value']}}">{{df_months.loc[i]["month"]}}</option>
+        {% endif %}
+        {% endfor %}
+    </select>
+    {% endmacro %}
+
+    {% macro render_window() %}
+    <p>Бронируем, занимаем или освобождаем квартиру?</p>
+    <select name="booking_type">
+        {% if type_selected == 0 %}
+        <option selected value="0">Освобождаем</option>
+        <option value="1">Занимаем</option>
+        <option value="2">Бронируем</option>
+        {% endif %}
+        {% if type_selected == 1 %}
+        <option value="0">Освобождаем</option>
+        <option selected value="1">Занимаем</option>
+        <option value="2">Бронируем</option>
+        {% endif %}
+        {% if type_selected == 2 %}
+        <option value="0">Освобождаем</option>
+        <option value="1">Занимаем</option>
+        <option selected value="2">Бронируем</option>
+        {% endif %}
+    </select>
+    <p>Заполните информацию о госте, если не освобождаете квартиру</p>
+    <p>
+        <label>Введите номер телефона гостя:</label>
+        <input class="guest" type="text" name="guest_phone" value="{{guest_phone}}">
+    </p>
+    <p>
+        <label>Введите ФИО гостя:</label>
+        <input class="guest" type="text" name="guest_name" value="{{guest_name}}">
+    </p>
+    {% endmacro %}
+
+</head>
+<body>
+    {{render_menu()}}
+    <p>Выберите месяц:<p>
+    <form action="{{url_for('index')}}" method="get">
+        {{render_month()}}
+        {{render_year()}}
+        <input type="submit" name="get_calendar" value="Показать">
+    {{render_calendar()}}
+    {{render_window()}}
+    </form>
+</body>
+</html>
